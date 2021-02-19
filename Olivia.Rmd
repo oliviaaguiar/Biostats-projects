@@ -24,6 +24,16 @@ library(mosaic)
 
 #bringing in data
 ```{r}
+codefield <- read_excel("Agriculture Data/DataS1.xlsx", 1)
+#Explanations of all the variables used for data analyses at the field scale (for plants, invertebrates, frogs, and fish).
 
+fieldscale <- read_excel("Agriculture Data/DataS1.xlsx", 2)
+#Data on biodiversity and environmental factors used for data analyses at the field scale (for plants, invertebrates, frogs, and fish).
+
+codeblock <- read_excel("Agriculture Data/DataS1.xlsx", 3)
+#Explanations of all the variables used for data analyses at the block scale (for birds).
+
+blockscale <- read_excel("Agriculture Data/DataS1.xlsx", 4)
+#Data on biodiversity and environmental factors used for data analyses at the block scale (for birds).
 ```
 
