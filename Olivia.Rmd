@@ -29,6 +29,7 @@ codefield <- read_excel("Agriculture Data/DataS1.xlsx", 1)
 
 fieldscale <- read_excel("Agriculture Data/DataS1.xlsx", 2)
 #Data on biodiversity and environmental factors used for data analyses at the field scale (for plants, invertebrates, frogs, and fish).
+#Variables to look at: ID, YEAR, SITE, FSIZE, HRBF, HRBL, INSE.A, FROGR, PLPHY, HYLA, TADPL, EFFRG, EFTRP
 
 codeblock <- read_excel("Agriculture Data/DataS1.xlsx", 3)
 #Explanations of all the variables used for data analyses at the block scale (for birds).
@@ -36,4 +37,17 @@ codeblock <- read_excel("Agriculture Data/DataS1.xlsx", 3)
 blockscale <- read_excel("Agriculture Data/DataS1.xlsx", 4)
 #Data on biodiversity and environmental factors used for data analyses at the block scale (for birds).
 ```
+
+```{r}
+#as.numeric(fieldscale$FROGR)
+frog <- fieldscale %>% select(ID, YEAR, SITE, FSIZE, HRBF, HRBL, INSE.A, FROGR, PLPHY, HYLA, TADPL, EFFRG, EFTRP) %>% filter(fieldscale, FROGR!='NA')
+#ID, year, site, fieldsize, total herbicides applied to leafs, total herbicides applied to levees, any insecticides used in nursery boxes, native frog richness, abundance pelophylax frogs, abundance hyla japonica frogs, abundance tadpoles, survey efforts for frogs, survey efforts for tadpoles (number of traps)
+head(data)
+
+ggplot(frog) + geom_line(aes(x=FROGR, y=HRBF))
+
+```
+
+
+
 
