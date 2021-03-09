@@ -38,6 +38,7 @@ blockscale <- read_excel("Agriculture Data/DataS1.xlsx", 4)
 #Data on biodiversity and environmental factors used for data analyses at the block scale (for birds).
 ```
 
+###frog graphs
 ```{r}
 #as.numeric(fieldscale$FROGR)
 frog <- fieldscale %>% select(ID, YEAR, SITE, FSIZE, HRBF, HRBL, INSE.A, FROGR, PLPHY, HYLA, TADPL, EFFRG, EFTRP) %>% subset(fieldscale$FROGR>=0) %>% subset(fieldscale$HRBF>=0)
@@ -66,6 +67,15 @@ plot(frog$HYLA, frog$INSE.A, main = 'H. Japonica Abundance vs Insecticide Use in
 
 ```
 
+###tadpole graphs
+```{r}
+tadpole <- frog %>% subset(frog$TADPL >= 0)
 
+plot(tadpole$TADPL, tadpole$HRBF, main = "Tadpole Abundance vs Herbicide Use on Leafs", xlab = "Tadpole Abundance", ylab = "Herbicide Use", pch = 19, frame = FALSE)
+
+plot(tadpole$TADPL, tadpole$HRBL, main = 'Tadpole Abundance vs Herbicide Use on Levees', xlab = 'Tadpole Abundance', ylab = 'Herbicide Use', pch = 19, frame = FALSE)
+
+plot(tadpole$TAPL, tadpole$INSE.A, main = 'Tadpole Abundance vs Insecticide Use in Nursery Boxes', xlab = 'Tadpole Abundance', ylab = 'Insecticide Use', pch = 19, frame = FALSE)
+```
 
 
