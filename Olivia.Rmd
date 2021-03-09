@@ -41,41 +41,51 @@ blockscale <- read_excel("Agriculture Data/DataS1.xlsx", 4)
 ###frog graphs
 ```{r}
 #as.numeric(fieldscale$FROGR)
-frog <- fieldscale %>% select(ID, YEAR, SITE, FSIZE, HRBF, HRBL, INSE.A, FROGR, PLPHY, HYLA, TADPL, EFFRG, EFTRP) %>% subset(fieldscale$FROGR>=0) %>% subset(fieldscale$HRBF>=0)
+frog <- fieldscale %>% select(ID, YEAR, SITE, FSIZE, HRBF, HRBL, INSE.A, FROGR, PLPHY, HYLA, TADPL, EFFRG, EFTRP) %>% subset(fieldscale$FROGR>=0) %>% subset(fieldscale$HRBF>=0) %>% subset(fieldscale$INSE.A>=0)
 #ID, year, site, fieldsize, total herbicides applied to leafs, total herbicides applied to levees, any insecticides used in nursery boxes, native frog richness, abundance pelophylax frogs, abundance hyla japonica frogs, abundance tadpoles, survey efforts for frogs, survey efforts for tadpoles (number of traps)
+as.character(frog$INSE.A)
+frog$INSE.A <- gsub("0", "No", frog$INSE.A)
+frog$INSE.A <- gsub("1", "Yes", frog$INSE.A)
 
 ###native frog richness
 plot(frog$FROGR, frog$HRBF, main = "Frog Abundance vs Herbicide Use on Leafs", xlab = "Frog Abundance", ylab = "Herbicide Use", pch = 19, frame = FALSE)
 
 plot(frog$FROGR, frog$HRBL, main = 'Frog Abundance vs Herbicide Use on Levees', xlab = 'Frog Abundance', ylab = 'Herbicide Use', pch = 19, frame = FALSE)
 
-plot(frog$FROGR, frog$INSE.A, main = 'Frog Abundance vs Insecticide Use in Nursery Boxes', xlab = 'Frog Abundance', ylab = 'Insecticide Use', pch = 19, frame = FALSE)
+frog %>% na.omit() %>% ggplot() +
+  geom_boxplot(aes(x=FROGR, y=INSE.A,)) + coord_flip() +xlab("Frog Abundance") + ylab("Insecticide Use in Nursery Boxes")
 
 ###abundance of pelophylax frogs
 plot(frog$PLPHY, frog$HRBF, main = "Pelophylax Abundance vs Herbicide Use on Leafs", xlab = "Pelophylax Abundance", ylab = "Herbicide Use", pch = 19, frame = FALSE)
 
 plot(frog$PLPHY, frog$HRBL, main = 'Pelophylax Abundance vs Herbicide Use on Levees', xlab = 'Pelophylax Abundance', ylab = 'Herbicide Use', pch = 19, frame = FALSE)
 
-plot(frog$PLPHY, frog$INSE.A, main = 'Pelophylax Abundance vs Insecticide Use in Nursery Boxes', xlab = 'Pelophylax Abundance', ylab = 'Insecticide Use', pch = 19, frame = FALSE)
+frog %>% na.omit() %>% ggplot() +
+  geom_boxplot(aes(x=PLPHY, y=INSE.A,)) + coord_flip() +xlab("Pelophylax Abundance") + ylab("Insecticide Use In Nursery Boxes")
 
 ###abundance of H. japonica
 plot(frog$HYLA, frog$HRBF, main = "H. Japonica Abundance vs Herbicide Use on Leafs", xlab = "H. Japonica Abundance", ylab = "Herbicide Use", pch = 19, frame = FALSE)
 
 plot(frog$HYLA, frog$HRBL, main = 'H. Japonica Abundance vs Herbicide Use on Levees', xlab = 'H. Japonica Abundance', ylab = 'Herbicide Use', pch = 19, frame = FALSE)
 
-plot(frog$HYLA, frog$INSE.A, main = 'H. Japonica Abundance vs Insecticide Use in Nursery Boxes', xlab = 'H. Japonica Abundance', ylab = 'Insecticide Use', pch = 19, frame = FALSE)
+frog %>% na.omit() %>% ggplot() +
+  geom_boxplot(aes(x=HYLA, y=INSE.A,)) + coord_flip() +xlab("H. Japonica Abundance") + ylab("Insecticide Use In Nursery Boxes")
 
 ```
 
 ###tadpole graphs
 ```{r}
 tadpole <- frog %>% subset(frog$TADPL >= 0)
+as.character(tadpole$INSE.A)
+tadpole$INSE.A <- gsub("0", "No", tadpole$INSE.A)
+tadpole$INSE.A <- gsub("1", "Yes", tadpole$INSE.A)
 
 plot(tadpole$TADPL, tadpole$HRBF, main = "Tadpole Abundance vs Herbicide Use on Leafs", xlab = "Tadpole Abundance", ylab = "Herbicide Use", pch = 19, frame = FALSE)
 
 plot(tadpole$TADPL, tadpole$HRBL, main = 'Tadpole Abundance vs Herbicide Use on Levees', xlab = 'Tadpole Abundance', ylab = 'Herbicide Use', pch = 19, frame = FALSE)
 
-plot(tadpole$TAPL, tadpole$INSE.A, main = 'Tadpole Abundance vs Insecticide Use in Nursery Boxes', xlab = 'Tadpole Abundance', ylab = 'Insecticide Use', pch = 19, frame = FALSE)
+tadpole %>% na.omit() %>% ggplot() +
+  geom_boxplot(aes(x=TADPL, y=INSE.A,)) + coord_flip() +xlab("Tadpole Abundance") + ylab("Insecticide Use In Nursery Boxes")
 ```
 
 
