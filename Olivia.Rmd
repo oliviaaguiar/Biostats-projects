@@ -48,12 +48,19 @@ frog$INSE.A <- gsub("0", "No", frog$INSE.A)
 frog$INSE.A <- gsub("1", "Yes", frog$INSE.A)
 
 ###native frog richness
-plot(frog$FROGR, frog$HRBF, main = "Frog Abundance vs Herbicide Use on Leafs", xlab = "Frog Abundance", ylab = "Herbicide Use", pch = 19, frame = FALSE)
 
-plot(frog$FROGR, frog$HRBL, main = 'Frog Abundance vs Herbicide Use on Levees', xlab = 'Frog Abundance', ylab = 'Herbicide Use', pch = 19, frame = FALSE)
+#plot(frog$FROGR, frog$HRBF, main = "Frog Abundance vs Herbicide Use on Leafs", xlab = "Frog Abundance", ylab = "Herbicide Use", pch = 19, frame = FALSE)
+
+#plot(frog$FROGR, frog$HRBL, main = 'Frog Abundance vs Herbicide Use on Levees', xlab = 'Frog Abundance', ylab = 'Herbicide Use', pch = 19, frame = FALSE)
 
 frog %>% na.omit() %>% ggplot() +
-  geom_boxplot(aes(x=FROGR, y=INSE.A,)) + coord_flip() +xlab("Frog Abundance") + ylab("Insecticide Use in Nursery Boxes")
+  geom_boxplot(aes(x=FROGR, y=INSE.A,)) + coord_flip() + xlab("Frog Abundance") + ylab("Insecticide Use in Nursery Boxes")
+
+frog %>% na.omit() %>% ggplot() +
+  geom_boxplot(aes(x=FROGR, y=HRBF)) + coord_flip() + xlab("Frog Abundance") + ylab("Herbicide Use on Leafs")
+
+frog %>% na.omit() %>% ggplot() +
+  geom_boxplot(aes(x=FROGR, y=HRBL)) + coord_flip() + xlab("Frog Abundance") + ylab("Herbicide use on Levees")
 
 ###abundance of pelophylax frogs
 plot(frog$PLPHY, frog$HRBF, main = "Pelophylax Abundance vs Herbicide Use on Leafs", xlab = "Pelophylax Abundance", ylab = "Herbicide Use", pch = 19, frame = FALSE)
@@ -88,4 +95,35 @@ tadpole %>% na.omit() %>% ggplot() +
   geom_boxplot(aes(x=TADPL, y=INSE.A,)) + coord_flip() +xlab("Tadpole Abundance") + ylab("Insecticide Use In Nursery Boxes")
 ```
 
+
+#Preliminary data analysis
+```{r}
+#tadpole abundance vs insecticide use in nursery boxes
+#t-test
+t.test(tadpole$TADPL ~ tadpole$INSE.A)
+
+#tadpole abundance vs herbicide use on leafs
+#correlation
+cor.test(tadpole$TADPL, tadpole$HRBF)
+
+#H. japonica vs insecticide use in nursery boxes
+#t-test
+t.test(frog$HYLA ~ frog$INSE.A)
+
+#H. japonica vs herbicide use on leafs
+#correlation
+cor.test(frog$HYLA, frog$HRBF)
+
+#Pelophylax vs insecticide use in nursery boxes
+#t-test
+t.test(frog$PLPHY ~ frog$INSE.A)
+
+#Pelophylax vs herbicide use on leafs
+#correlation
+cor.test(frog$PLPHY, frog$HRBF)
+
+#Frog abundance vs insecticide use in nursery boxes
+#t-test
+t.test(frog$FROGR ~ frog$INSE.A)
+```
 
