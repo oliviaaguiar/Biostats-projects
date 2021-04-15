@@ -1,0 +1,132 @@
+---
+title: "Olivia LearnR Tutorial"
+author: "Olivia Aguiar"
+date: "4/15/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(shiny)
+library(learnr)
+library(tidyverse)
+library(readxl)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Using R for Data Visualization and Analysis
+R is a common programming language that is very easy to learn. One example of it's application is found in the field of Biology, where scientists can use R to make their work a lot easier through data cleaning, easily making attractive graphs, and functions that will conduct statistical tests. Today we will be using R for just that.
+Outline of lesson:
+  -Making a data frame
+  -Making data visualizations
+  -Basic statistical tests
+  
+  
+#Making a data frame
+Think of a data frame as a spreadsheet filled with data. You can have many variables included in a single data frame as they each have their own column in the frame. Some common examples of this would be recording the weight, age, and height of Individual A, B, C, etc. Each data entry fills one row of a data frame, while each obervation of a variable fills the columns of the data frame. 
+If you are working from an Excel spreadsheet or csv file, R can easily import it as a data frame using the read_excel() or read.csv() functions. To save the data frame as an object in R you must assign it to a label using <- 
+
+Let's try it out with this data on agricultural fields and frogs:
+```{r}
+frog <- read.csv('frog.csv')
+```
+
+We now have a data frame! Selecting data from this data frame will allow us to create beautiful visualizations and find significant connections between variables.
+
+
+#Data visualizations
+Now that we have a data frame we want to get a feel for our data. We can easily do this through graphs that will present the structure of the data in an easy to understand way. Tidyverse is also easily able to do this as you can easily customize your graphs by adding onto the ggplot() function.
+
+First, we will look at frog abundance in relation to a couple of variables. Lets take it one step at a time.
+```{r}
+frog %>% na.omit() %>% ggplot()
+```
+As you can see, using ggplot() alone will not give you a graph. That is because we then need to customize the ggplot using additional functions that specify the type of graph and aesthetics. For this graph lets look at frog abundance against insecticide use in nursery boxes. In the frog data frame, the column FROGR corresponds to frog abundance and INSE.A corresponds to insecticide use.
+
+Because insecticide use is a categorical variable (yes/no) and frog abundance is numerical a boxplot is a good way to go.
+```{r}
+frog %>% na.omit() %>% ggplot() +
+  geom_boxplot(aes(x=FROGR, y=INSE.A,))
+```
+That looks a little awkward! Let's try flipping the graph around so it looks better.
+```{r}
+frog %>% na.omit() %>% ggplot() +
+  geom_boxplot(aes(x=FROGR, y=INSE.A,)) + coord_flip()
+```
+Much better, but someone looking at this graph won't have any clue what INSE.A and FROGR means! That's why it is always important to include axis labels.
+```{r}
+frog %>% na.omit() %>% ggplot() +
+  geom_boxplot(aes(x=FROGR, y=INSE.A,)) + coord_flip() + xlab("Frog Abundance") + ylab("Insecticide Use in Nursery Boxes")
+```
+Now the graph is easy to read and makes sense. You can also specify colors and axes lines, but we won't be doing that today.
+
+If you are trying to make a graph of two numerical variables, the plot() function is easy to use. Let's try it with tadpole abundance versus herbicide use on leaves. We need to specify the columns in the data frame specifically by using $ as you can see below.
+```{r}
+plot(tadpole$TADPL, tadpole$HRBF)
+```
+Again this looks kind of ugly, so we can add arguments in the parenthesis and separate them using commas.
+```{r}
+plot(tadpole$TADPL, tadpole$HRBF, main = "Tadpole Abundance vs Herbicide Use on Leafs", xlab = "Tadpole Abundance", ylab = "Herbicide Use", pch = 19, frame = FALSE)
+```
+As you can see just adding or taking away from a graph can make a world of a difference. And this can be done for any of the other variables in the data frame! Here are some examples:
+```{r}
+tadpole %>% na.omit() %>% ggplot() +
+  geom_boxplot(aes(x=TADPL, y=INSE.A,)) + coord_flip() +xlab("Tadpole Abundance") + ylab("Insecticide Use In Nursery Boxes")
+```
+
+```{r}
+plot(frog$HYLA, frog$HRBL, main = 'H. Japonica Abundance vs Herbicide Use on Levees', xlab = 'H. Japonica Abundance', ylab = 'Herbicide Use', pch = 19, frame = FALSE)
+
+```
+
+```{r}
+frog %>% na.omit() %>% ggplot() +
+  geom_boxplot(aes(x=PLPHY, y=INSE.A,)) + coord_flip() +xlab("Pelophylax Abundance") + ylab("Insecticide Use In Nursery Boxes")
+```
+
+
+#Data Analysis
+Now that we have a feel for what our data looks like we need to see if there is anything significant going on. We will be using t-tests and correlations for this data. Let's look at tadpole abundance first. Again, you will need to specify the variables in the data frame using $ . In a simplified explanation, a t-test will test for a significant difference between two groups.
+```{r}
+t.test(tadpole$TADPL ~ tadpole$INSE.A)
+```
+Whoa that's a lot of words! But don't worry- for this tutorial we only need to be focusing on the p-value. Your p-value is the probability of getting results as least as extreme as the results observed in your data. Usually you want a p-value to be less than 0.05 to be considered significant. This test has a p-value of 0.0002498 so it is significant!
+
+Next we will use a correlation test to see if there is any correlation between tadpole abundance and herbicide use on leaves. Remember- correlation does not equal causation! If you get a significant p-value after running a correlation test you can see that there is some sort of relationship between the two variables, but NOT that one is causing changes in the other.
+```{r}
+cor.test(tadpole$TADPL, tadpole$HRBF)
+```
+So we can see here that the p-value is 0.148, that means that there is not a significant correlation between tadpole abundance and herbicide use on leaves.
+
+Let's try this with the other variables in the data set:
+H. japonica abundance versus insecticide use in nursery boxes.
+```{r}
+t.test(frog$HYLA ~ frog$INSE.A)
+```
+Not significant
+
+H. japonica abundance versus herbicide use on leafs
+```{r}
+cor.test(frog$HYLA, frog$HRBF)
+```
+Not significant
+
+Pelophylax abundance versus insecticide use in nursery boxes
+```{r}
+t.test(frog$PLPHY ~ frog$INSE.A)
+```
+Not significant
+
+Pelophylax abundance versus herbicide use on leaves
+```{r}
+cor.test(frog$PLPHY, frog$HRBF)
+```
+Significant
+
+Frog abundance versus insecticide use in nursery boxes
+```{r}
+t.test(frog$FROGR ~ frog$INSE.A)
+```
+Significant
+
+
+So now you have successfully created a data frame, learned how to make some cool graphs, as well as the correlation and t-test! Happy coding!
